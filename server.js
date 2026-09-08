@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const YTDLP_PATH = process.platform === "win32"
   ? path.join(__dirname, "yt-dlp.exe")
-  : "/usr/local/bin/yt-dlp";
+  : path.join(__dirname, "yt-dlp");
 
 let FFMPEG_PATH;
 try { FFMPEG_PATH = require("ffmpeg-static"); } catch { FFMPEG_PATH = null; }
