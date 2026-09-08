@@ -1,0 +1,21 @@
+{
+  "name": "youtube-downloader",
+  "version": "2.0.0",
+  "description": "YouTube Video Downloader Web App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ffmpeg-static": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "allowScripts": {
+    "ffmpeg-static@5.3.0": true
+  }
+}

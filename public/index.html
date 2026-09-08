@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Download YouTube videos in high quality MP4 format. Fast, free, and easy to use YouTube video downloader.">
+    <title>YT Downloader - YouTube Video Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#grad1)"/>
+                        <path d="M10 8.5v7l6-3.5-6-3.5z" fill="white"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="22">
+                                <stop offset="0%" stop-color="#FF0844"/>
+                                <stop offset="100%" stop-color="#FFB199"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="logo-text">YT <span>Downloader</span></h1>
+            </div>
+            <p class="subtitle">ইউটিউব ভিডিও ডাউনলোড করুন সহজেই</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section" id="searchSection">
+            <div class="search-card glass-card">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                        <input type="text" id="urlInput" placeholder="YouTube ভিডিও লিংক পেস্ট করুন..." autocomplete="off">
+                    </div>
+                    <button class="btn-primary" id="fetchBtn" onclick="fetchVideoInfo()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <span>খুঁজুন</span>
+                    </button>
+                </div>
+                <div class="example-links">
+                    <span>উদাহরণ:</span>
+                    <a href="#" onclick="setUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); return false;">youtube.com/watch?v=...</a>
+                    <a href="#" onclick="setUrl('https://youtu.be/dQw4w9WgXcQ'); return false;">youtu.be/...</a>
+                    <a href="#" onclick="setUrl('https://youtube.com/shorts/LCyT_Y6sUsM'); return false;">youtube.com/shorts/...</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Message -->
+        <div class="error-msg" id="errorMsg" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M15 9l-6 6M9 9l6 6"/>
+            </svg>
+            <span id="errorText"></span>
+            <button onclick="hideError()" class="error-close">&times;</button>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-section" id="loadingSection" style="display:none;">
+            <div class="glass-card loading-card">
+                <div class="spinner"></div>
+                <p class="loading-text">ভিডিও তথ্য লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <!-- Video Info Section -->
+        <section class="video-section" id="videoSection" style="display:none;">
+            <div class="glass-card video-card">
+                <div class="video-info">
+                    <div class="thumbnail-wrapper">
+                        <img id="thumbnail" src="" alt="Video Thumbnail">
+                        <div class="duration-badge" id="duration"></div>
+                    </div>
+                    <div class="video-details">
+                        <h2 class="video-title" id="videoTitle"></h2>
+                        <div class="video-meta">
+                            <span class="meta-item" id="videoAuthor">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span></span>
+                            </span>
+                            <span class="meta-item" id="videoViews">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formats-section">
+                    <h3 class="formats-title">📥 ডাউনলোড ফরম্যাট নির্বাচন করুন</h3>
+                    <div class="formats-grid" id="formatsGrid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Progress -->
+        <div class="download-progress" id="downloadProgress" style="display:none;">
+            <div class="glass-card progress-card">
+                <div class="progress-info">
+                    <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>ডাউনলোড শুরু হচ্ছে...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🎬 YT Downloader &mdash; Server-side Download</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
